@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Tut Html Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Homemade+Apple&display=swap" rel="stylesheet">
+<style>
+body {
+      margin: 0;
+      padding: 50px;
+      background-color: #faf3e0;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.5em;
+      line-height: 1.8;
+      color: #3b2f2f;
+      background-image: radial-gradient(#ea0c08 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      color: #2c3e50;
+      margin-top: 50px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+ /* --- Calendar container --- */
+    .calendar-box {
+      position: sticky;
+      bottom: 20px;
+      right: 20px;
+      width: 280px;
+      max-width: 90vw;       /* ensures it fits within screen width */
+      background-color: #ffffffcc; 
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 15px;
+      backdrop-filter: blur(6px);
+      transition: opacity 0.4s ease, transform 0.3s ease;
+      z-index: 10;
+      opacity: 0.25;
+      overflow-x: auto;       /* prevent overflow on smaller screens */
+    }
+
+    .calendar-box:hover {
+      opacity: 1;
+      transform: scale(1.03);
+    }
+
+    /* --- Calendar table --- */
+    .calendar-box table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 0.85em;
+    }
+
+    .calendar-box caption {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 8px;
+    }
+
+    .calendar-box th, 
+    .calendar-box td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .calendar-box tr:nth-child(even) td {
+      background-color: #f8f8f8;
+    }
+
+    .calendar-box a {
+      text-decoration: none;
+      color: #0077cc;
+    }
+
+    .calendar-box a:hover {
+      text-decoration: underline;
+    }
+
+    /* --- Responsive adjustments --- */
+    @media (max-width: 500px) {
+      .calendar-box {
+        width: 220px;
+        bottom: 10px;
+        right: 10px;
+        font-size: 0.75em;
+        padding: 10px;
+      }
+    }
+
+    @media (max-height: 400px) {
+      .calendar-box {
+        transform: scale(0.8);
+        transform-origin: bottom right;
+      }
+    }
+
+</style>
+</head>
+<h1> Social Media</h1>
+
+<body>
+<!-- Portfolio Card -->
+<div class="card-container">
+  <div class="card">
+    <a href="https://www.instagram.com/arcticwolf1193/" target="_blank">
+      <img src="insta.jpg" alt="Instagram Portfolio">
+    </a>
+    <div class="card-content">
+      <h3>Instagram </h3>
+      <p>I post sometimes</p>
+    </div>
+  </div>
+</div>
+
+<div style="width:300px; border:1px solid #ccc; border-radius 8px; padding:1px; margin: auto;">
+<div class="card-container">
+  <div class="card">
+    <a href="https://cara.app/arcticwolf1193"><img src="cara.png" alt="Link 1"></a>
+    <div class="card-content">
+      <h3> Cara</h3>
+      <p> I post animations on here somtimes</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+.card-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.card {
+  width: 280px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden; /* ensures image corners match panel */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover; /* key line: crops image to fit neatly */
+  display: block;
+}
+
+.card-content {
+  padding: 10px;
+  text-align: center;
+}
+
+.card-content h3 {
+  margin: 8px 0 4px;
+  font-size: 1rem;
+}
+
+.card-content p {
+  font-size: 0.85rem;
+  color: #555;
+}
+</style>
+
+<div class="calendar-box">
+  <table>
+    <caption>October 2025</caption>
+    <tr>
+      <th>Sun</th>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
+      <th>Sat</th>
+    </tr>
+    <tr>
+      <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td>
+    </tr>
+    <tr>
+      <td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td>
+    </tr>
+    <tr>
+      <td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td>
+    </tr>
+    <tr>
+      <td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td>
+    </tr>
+    <tr>
+      <td>29</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td><a href="171025.html">Intro</a></td>
+      <td><a href="second_page.html">Art</a></td>
+      <td><a href="third_page.html">Social Media</a></td>
+      <td><a href="fourth_page.html">Cats</a></td>
+      <td><a href="fifth_page.html">Inspiration</a></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

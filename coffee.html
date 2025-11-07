@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee & Tea</title>
+  <style>
+    /* RESET */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Helvetica Neue", sans-serif;
+      background: #fafafa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: url("https://images.unsplash.com/photo-1509042239860-f550ce710b93") center/cover no-repeat;
+      color: white;
+      text-align: center;
+      padding: 100px 20px;
+    }
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    header a {
+      background: #8B5E3C;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    header a:hover {
+      background: #6f4629;
+    }
+
+    nav {
+      background: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+    }
+    nav a {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #8B5E3C;
+    }
+
+    section {
+      max-width: 1100px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+    section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .card h3 {
+      margin: 15px 0 5px;
+    }
+    .card p {
+      font-size: 0.9rem;
+      padding: 0 15px 15px;
+      color: #666;
+    }
+
+    .about {
+      text-align: center;
+      padding: 30px;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    footer p {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to Arctic's Coffee</h1>
+    <p>Discover the perfect place to blackout on caffeine </p>
+    <a href="#menu">Explore Menu</a>
+  </header>
+
+  <nav>
+    <a href="#menu">Menu</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="menu">
+    <h2>Our Favorites</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348" alt="Coffee">
+        <h3>Espresso</h3>
+        <p>Rich, bold, and smooth. The perfect start to your day.</p>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93" alt="Latte">
+        <h3>Latte</h3>
+        <p>Creamy and comforting with a touch of art in every cup.</p>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" alt="Green Tea">
+        <h3>Green Tea</h3>
+        <p>Refreshing Tea.</p>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1506354666786-959d6d497f1a" alt="Chai">
+        <h3>Chai Latte</h3>
+        <p>Spiced black tea with milk for a spiced treat.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <h2>Our Story</h2>
+    <p>
+      At Arctic's Coffee, we like our coffee and teas at every hour of the day
+    </p>
+  </section>
+
+  <footer id="contact">
+    <p>📍 Address: 123 Brew Street, Coffee City | 📞 (000) 000-0000 | ✉️ hello@fancy.com</p>
+    <p>&copy; 2025 Arctic's Coffee & Tea</p>
+  </footer>
+
+</body>
+</html>

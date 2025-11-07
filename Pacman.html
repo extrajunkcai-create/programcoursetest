@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Pac-Man Clone</title>
+  <style>
+    :root {
+      --cell: 24px; /* size of each grid cell */
+    }
+    body {
+      margin: 0;
+      background: #001f3f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      font-family: sans-serif;
+    }
+    canvas {
+      background: black;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,.6);
+    }
+    #scoreboard {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="scoreboard">Score: <span id="score">0</span></div>
+  <canvas id="game"></canvas>
+
+<script>
+/* CONFIG */
+const CELL = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 24;
+const ROWS = 21;
+const COLS = 19;
+const canvas = document.getElementById('game');
+canvas.width = COLS * CELL;
+canvas.height = ROWS * CELL;
+const ctx = canvas.getContext('2d');
+const scoreEl = document.getElementById('score');
+
+/* LEVEL MAP (1 = wall, 2 = pellet, 0 = empty) */
+const level = [
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,1],
+  [1,2,1,1,1,2,1,1,2,0,2,1,1,2,1,1,1,2,1],
+  [1,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,1],
+  [1,2,1,1,2,1,1,1,1,1,1,1,1,1,2,1,1,2,1],
+  [1,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,1],
+  [1,1,1,1,1,1,1,1,2,0,2,1,1,1,1,1,1,1,1],
+  [1,2,2,2,2,2,2,1,2,0,2,1,2,2,2,2,2,2,1],
+  [1,2,1,1,1,1,2,1,1,0,1,1,2,1,1,1,1,2,1],
+  [1,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,1],
+  [1,2,1,1,1,1,2,1,1,0,1,1,2,1,1,1,1,2,1],
+  [1,2,2,2,2,2,2,1,2,0,2,1,2,2,2,2,2,2,1],
+  [1,1,1,1,1,1,1,1,2,0,2,1,1,1,1,1,1,1,1],
+  [1,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,1],
+  [1,2,1,1,2,1,1,1,1,1,1,1,1,1,2,1,1,2,1],
+  [1,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,1],
+  [1,2,1,1,1,2,1,1,2,0,2,1,1,2,1,1,1,2,1],
+  [1,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+];
+
+/* PLAYER */
+const player = {
+  x: CELL*9+CELL/2,
+  y: CELL*15+CELL/2,
+  radius: CELL*0.4,
+  dir: {x:0,y:0},
+  desiredDir: {x:0,y:0},
+  speed: 2.5,
+  mouth: 0
+};
+
+/* GHOSTS */
+const ghosts = [
+  {x:CELL*9+CELL/2, y:CELL*7+CELL/2, color:"red", dir:{x:0,y:0}, speed:2},
+  {x:CELL*8+CELL/2, y:CELL*7+CELL/2, color:"pink", dir:{x:0,y:0}, speed:2},
+  {x:CELL*10+CELL/2,y:CELL*7+CELL/2, color:"cyan", dir:{x:0,y:0}, speed:2},
+  {x:CELL*9+CELL/2, y:CELL*9+CELL/2, color:"orange", dir:{x:0,y:0}, speed:2}
+];
+
+/* SCORE */
+let score = 0;
+
+/* INPUT */
+window.addEventListener("keydown", e=>{
+  if(["ArrowUp","w","W"].includes(e.key)) player.desiredDir={x:0,y:-1};
+  if(["ArrowDown","s","S"].includes(e.key)) player.desiredDir={x:0,y:1};
+  if(["ArrowLeft","a","A"].includes(e.key)) player.desiredDir={x:-1,y:0};
+  if(["ArrowRight","d","D"].includes(e.key)) player.desiredDir={x:1,y:0};
+});
+
+/* HELPERS */
+function cellAt(x,y){
+  const col=Math.floor(x/CELL), row=Math.floor(y/CELL);
+  if(row<0||row>=ROWS||col<0||col>=COLS) return 1;
+  return level[row][col];
+}
+function isWall(x,y){
+  return cellAt(x,y)===1;
+}
+function canMove(x,y,r,dir,speed){
+  const nx=x+dir.x*speed, ny=y+dir.y*speed;
+  const points=[
+    {x:nx-r+2,y:ny-r+2},
+    {x:nx+r-2,y:ny-r+2},
+    {x:nx-r+2,y:ny+r-2},
+    {x:nx+r-2,y:ny+r-2}
+  ];
+  return points.every(p=>cellAt(p.x,p.y)!==1);
+}
+
+/* UPDATE */
+function update(){
+  // player turn handling
+  if(player.desiredDir.x||player.desiredDir.y){
+    if(canMove(player.x,player.y,player.radius,player.desiredDir,player.speed)){
+      player.dir={...player.desiredDir};
+    }
+  }
+  // move player
+  if(player.dir.x||player.dir.y){
+    if(canMove(player.x,player.y,player.radius,player.dir,player.speed)){
+      player.x+=player.dir.x*player.speed;
+      player.y+=player.dir.y*player.speed;
+    }
+  }
+  // eat pellets
+  const c=Math.floor(player.x/CELL), r=Math.floor(player.y/CELL);
+  if(level[r] && level[r][c]===2){
+    level[r][c]=0;
+    score+=10;
+    scoreEl.textContent=score;
+  }
+  // ghosts random movement
+  for(const g of ghosts){
+    if(!canMove(g.x,g.y,CELL*0.4,g.dir,g.speed) || Math.random()<0.02){
+      const dirs=[{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
+      dirs.sort(()=>Math.random()-0.5);
+      for(const d of dirs){
+        if(canMove(g.x,g.y,CELL*0.4,d,g.speed)){g.dir=d;break;}
+      }
+    }
+    g.x+=g.dir.x*g.speed;
+    g.y+=g.dir.y*g.speed;
+    // collision with player
+    const dx=g.x-player.x, dy=g.y-player.y;
+    if(dx*dx+dy*dy<(player.radius+CELL*0.4)**2){
+      alert("Game Over! Final Score: "+score);
+      document.location.reload();
+    }
+  }
+  player.mouth+=0.2;
+}
+
+/* DRAW */
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let r=0;r<ROWS;r++){
+    for(let c=0;c<COLS;c++){
+      if(level[r][c]===1){
+        ctx.fillStyle="green";
+        ctx.fillRect(c*CELL,r*CELL,CELL,CELL);
+      }
+      if(level[r][c]===2){
+        ctx.fillStyle="gold";
+        ctx.beginPath();
+        ctx.arc(c*CELL+CELL/2,r*CELL+CELL/2,3,0,Math.PI*2);
+        ctx.fill();
+      }
+    }
+  }
+  // draw player
+  ctx.fillStyle="yellow";
+  ctx.beginPath();
+  const angle=Math.atan2(player.dir.y,player.dir.x);
+  const mouth=Math.abs(Math.sin(player.mouth))*0.3;
+  ctx.moveTo(player.x,player.y);
+  ctx.arc(player.x,player.y,player.radius,angle+mouth,angle+Math.PI*2-mouth);
+  ctx.closePath();
+  ctx.fill();
+  // draw ghosts
+  for(const g of ghosts){
+    ctx.fillStyle=g.color;
+    ctx.beginPath();
+    ctx.arc(g.x,g.y,CELL*0.4,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle="white";
+    ctx.beginPath();
+    ctx.arc(g.x-5,g.y-3,5,0,Math.PI*2);
+    ctx.arc(g.x+5,g.y-3,5,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle="black";
+    ctx.beginPath();
+    ctx.arc(g.x-5,g.y-3,2,0,Math.PI*2);
+    ctx.arc(g.x+5,g.y-3,2,0,Math.PI*2);
+    ctx.fill();
+  }
+}
+
+/* LOOP */
+function loop(){
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
